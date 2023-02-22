@@ -1,4 +1,4 @@
-# Social Media Project
+# Social Media Project - Fronend
 
 The goal of this project is to create a social media platform where users can create profiles, connect
 with friends, share posts, and interact with each other.
@@ -17,21 +17,8 @@ with friends, share posts, and interact with each other.
 In terminal:
 
 ```
-git clone https://github.com/rlopxhan21/SocialMedia.git
+git clone https://github.com/rlopxhan21/SocialMediaProject-Frontend.git
 ```
-
-
-After the clone is successful, open one terminal in /Backend folder:
-Run the following command for creating virtual env and installing all the required dependencies.
-
-```
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-```
-
-And also create a file .env in /Backend folder and store SECRET_KEY, EMAIL_HOST_USER & EMAIL_HOST_PASSWORD.
-
 
 Open another terminal in /Frontend folder and run the following command for installing all the required dependencies.
 
@@ -40,11 +27,6 @@ npm install
 ```
 To run:
 
-On /Backend folder terminal:
-
-```
-python manage.py runserver
-```
 
 On /Frontend folder terminal:
 

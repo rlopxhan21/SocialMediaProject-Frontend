@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams, Link as RouterLink } from "react-router-dom";
 import moment from "moment";
@@ -44,7 +44,7 @@ import {
   Typography,
 } from "@mui/material";
 import RecentActivities from "../Rightside/RecentActivities";
-import { useGetRequest } from "../../hooks/api";
+import { useAuthPostRequest, useGetRequest } from "../../hooks/api";
 
 const style = {
   position: "absolute",
@@ -100,11 +100,24 @@ const DetailPost = () => {
   };
 
   // Receiving Post Data from Backend
-  const {
-    data: postData,
-    loading,
-    error,
-  } = useGetRequest(`feed/post/${postID}`);
+  const [url, setURL] = React.useState(`feed/post/${postID}`);
+  const { data: postData, loading, error } = useGetRequest(url);
+
+  // TO send like POST request
+  const [urlData, setUrlData] = React.useState({ url: "", data: "" });
+  const { data: LikeData } = useAuthPostRequest(urlData.url, urlData.data);
+
+  React.useEffect(() => {
+    LikeData && setURL(`feed/post/${postID}/`);
+    setUrlData({ url: "", data: "" });
+  }, [LikeData, postID]);
+
+  // Checking whether user liked a post or not
+  const userData = useSelector((state) => state.auth.currentUserData);
+
+  const isLiked =
+    postData?.liked_post?.filter((item) => item?.author === userData?.email)
+      .length > 0;
 
   React.useEffect(() => {
     if (postData) {
@@ -126,6 +139,10 @@ const DetailPost = () => {
 
   const onLoveHandler = (event) => {
     if (isLoggedIn) {
+      setUrlData({
+        url: `feed/post/${postID}/like/`,
+        data: { comment: "yes" },
+      });
     } else {
       navigate("/login");
     }
@@ -174,6 +191,7 @@ const DetailPost = () => {
       setCommentInput("");
     }
   };
+
   return (
     <Stack
       flex={6}
@@ -359,26 +377,24 @@ const DetailPost = () => {
         </CardContent>
         <CardActions disableSpacing>
           <IconButton aria-label="add to favorites" onClick={onLoveHandler}>
-            <Checkbox
-              icon={
-                <Badge
-                  badgeContent={postData?.liked_post?.length}
-                  max={99}
-                  color="secondary"
-                >
-                  <FavoriteBorder />
-                </Badge>
-              }
-              checkedIcon={
-                <Badge
-                  badgeContent={postData?.liked_post?.length}
-                  max={99}
-                  color="secondary"
-                >
-                  <Favorite sx={{ color: "red" }} />
-                </Badge>
-              }
-            />
+            {!isLiked && (
+              <Badge
+                badgeContent={postData?.liked_post?.length}
+                max={99}
+                color="secondary"
+              >
+                <FavoriteBorder />
+              </Badge>
+            )}
+            {isLiked && (
+              <Badge
+                badgeContent={postData?.liked_post?.length}
+                max={99}
+                color="secondary"
+              >
+                <Favorite sx={{ color: "red" }} />
+              </Badge>
+            )}
           </IconButton>
 
           <IconButton aria-label="comment">

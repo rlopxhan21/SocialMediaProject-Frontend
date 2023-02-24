@@ -52,7 +52,9 @@ function App() {
     `useraccount/userinfo/${currentUserID}/`
   );
 
-  profileData && dispatch(authActions.updateCurrentUserData(profileData));
+  React.useEffect(() => {
+    profileData && dispatch(authActions.updateCurrentUserData(profileData));
+  }, [profileData, dispatch]);
 
   // Receiving All Post Data
   const { data: postData, loading, error } = useGetRequest("feed/post/");

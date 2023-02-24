@@ -22,14 +22,13 @@ import {
   CardContent,
   CardHeader,
   CardMedia,
-  Checkbox,
   IconButton,
   ListItemIcon,
   Menu,
   MenuItem,
   Typography,
 } from "@mui/material";
-import { useAuthPostRequest } from "../../hooks/api";
+import { useAuthPostRequest, useGetRequest } from "../../hooks/api";
 
 const Post = (props) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -43,9 +42,33 @@ const Post = (props) => {
     setAnchorEl(null);
   };
 
+  // Receiving Post Data from Backend
+  const [url, setURL] = React.useState(`feed/post/`);
+  const { data: postData } = useGetRequest(url);
+
+  React.useEffect(() => {}, []);
+
+  // importing login state
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
   const navigate = useNavigate();
+
+  // Importing user detail and postData from redux
+  const userData = useSelector((state) => state.auth.curentUserData);
+
+  // console.log("liked_post", props.liked_post);
+
+  const postLike = props.liked_post.filter(
+    (item) => userData?.email === item?.author
+  );
+
+  const isPostLiked = postLike.length > 0;
+
+  // React.useEffect(() => {
+  //   console.log(userData);
+  // }, [userData]);
+
+  // console.log(isPostLiked);
 
   // TO send like POST request
   const [urlData, setUrlData] = React.useState({ url: "", data: "" });
@@ -174,18 +197,16 @@ const Post = (props) => {
       </CardContent>
       <CardActions disableSpacing>
         <IconButton aria-label="add to favorites" onClick={onLoveHandler}>
-          <Checkbox
-            icon={
-              <Badge badgeContent={props.loveNumber} max={99} color="secondary">
-                <FavoriteBorder />
-              </Badge>
-            }
-            checkedIcon={
-              <Badge badgeContent={props.loveNumber} max={99} color="secondary">
-                <Favorite sx={{ color: "red" }} />
-              </Badge>
-            }
-          />
+          {!isPostLiked && (
+            <Badge badgeContent={props.loveNumber} max={99} color="secondary">
+              <FavoriteBorder />
+            </Badge>
+          )}
+          {isPostLiked && (
+            <Badge badgeContent={props.loveNumber} max={99} color="secondary">
+              <Favorite sx={{ color: "red" }} />
+            </Badge>
+          )}
         </IconButton>
 
         <IconButton

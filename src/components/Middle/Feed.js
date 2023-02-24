@@ -61,6 +61,7 @@ const Feed = (props) => {
             content={item.content}
             loveNumber={item.liked_post.length}
             commentNumber={item.comment_on_post.length}
+            liked_post={item.liked_post}
           />
         ))}
     </Box>

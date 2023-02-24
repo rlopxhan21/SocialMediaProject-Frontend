@@ -11,11 +11,6 @@ const dataSlice = createSlice({
     postDataHandler(state, action) {
       state.postData = action.payload;
     },
-    updatePostDataHandler(state, action) {
-      const oldData = JSON.stringify(state.postData);
-      console.log(oldData);
-      console.log(action.payload);
-    },
   },
 });
 

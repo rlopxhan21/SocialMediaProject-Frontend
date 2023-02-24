@@ -12,6 +12,9 @@ export const useGetRequest = (url) => {
   const [error, setError] = React.useState("");
 
   React.useEffect(() => {
+    if (url.length === 0) {
+      return;
+    }
     setLoading(true);
 
     const fetchData = async () => {

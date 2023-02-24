@@ -6,14 +6,14 @@ import Feed from "../components/Middle/Feed";
 import RightSidebar from "../components/Rightside/RightSidebar";
 import MobileBottom from "../components/Layout/MobileBottom";
 
-const HomePage = () => {
+const HomePage = (props) => {
   return (
     <Box backgroundColor={"background.default"} color={"text.primary"}>
       <Header />
 
       <Stack direction="row" justifyContent="space-between">
         <LeftSidebar sx={{ display: { xs: "none", md: "block" } }} />
-        <Feed />
+        <Feed error={props.error} />
         <RightSidebar sx={{ display: { xs: "none", md: "block" } }} />
       </Stack>
       <MobileBottom />

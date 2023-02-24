@@ -1,9 +1,44 @@
-import { LockOutlined } from "@mui/icons-material";
-import { Avatar, Box, Button, Typography } from "@mui/material";
 import React from "react";
 import Header from "../Layout/Header";
+import { useSelector, useDispatch } from "react-redux";
+import { LockOutlined } from "@mui/icons-material";
+import { Avatar, Box, Button, TextField, Typography } from "@mui/material";
+import { usePostRequest } from "../../hooks/api";
+import { authActions } from "../../Redux/authSlice";
 
 const AccountActivation = () => {
+  // Sending Data for login after activation
+  const [urlData, setUrlData] = React.useState({ url: "", data: "" });
+  const { data, error, loading } = usePostRequest(urlData.url, urlData.data);
+
+  // Checking password field validity
+  const [passwordFieldError, setPasswordFieldError] = React.useState(false);
+
+  const dispatch = useDispatch();
+
+  const activatedUserData = useSelector(
+    (state) => state.auth.unactivatedUserData
+  );
+
+  data?.access && dispatch(authActions.loginHandler(data));
+
+  const onLoginSubmitHandler = (event) => {
+    event.preventDefault();
+    const password = event.target.password1.value;
+
+    if (password.length < 7) {
+      setPasswordFieldError(true);
+      return;
+    }
+
+    const loginData = {
+      email: activatedUserData?.email,
+      password: password,
+    };
+
+    setUrlData({ url: "auth/jwt/create/", data: loginData });
+  };
+
   return (
     <React.Fragment>
       <Header />
@@ -23,7 +58,7 @@ const AccountActivation = () => {
         </Typography>
         <Box
           component="form"
-          // onSubmit={onLoginSubmitHandler}
+          onSubmit={onLoginSubmitHandler}
           noValidate
           sx={{ mt: 1 }}
         >
@@ -31,13 +66,26 @@ const AccountActivation = () => {
             Activate your account from the link sent to your email. And Use this
             button to sign in the system.
           </Typography>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="password1"
+            label="Password*"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+            error={passwordFieldError}
+            sx={{ my: "1rem" }}
+          />
+
           <Button
             type="submit"
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Click here after Account Activation
+            Sign In Again after Account Activation
           </Button>
         </Box>
       </Box>

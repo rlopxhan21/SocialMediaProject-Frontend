@@ -505,6 +505,16 @@ const Profile = ({ profileData, loading, error }) => {
                 <Typography variant="h6" my={2}>
                   Recent Posts by You
                 </Typography>
+                {profileData?.postlist_author?.length === 0 && (
+                  <Typography
+                    color={"text.disabled"}
+                    variant="subtitle1"
+                    textAlign={"center"}
+                    marginTop={10}
+                  >
+                    No Post Found in the System!
+                  </Typography>
+                )}
                 {profileData?.postlist_author.map((item) => (
                   <Post
                     key={item.id}
@@ -532,6 +542,15 @@ const Profile = ({ profileData, loading, error }) => {
                 sx={{ display: { xs: "none", md: "block" } }}
               >
                 <Typography variant="h6">Recent Activities by You</Typography>
+                {profileData?.commentlist_author?.length === 0 && (
+                  <Typography
+                    color={"text.disabled"}
+                    variant="subtitle1"
+                    textAlign={"center"}
+                  >
+                    No activities in the System!
+                  </Typography>
+                )}
                 {profileData?.commentlist_author.map((item) => (
                   <RecentActivities
                     key={item.id}

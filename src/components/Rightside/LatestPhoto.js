@@ -53,6 +53,11 @@ export default function LatestPhoto() {
 
   return (
     <ImageList sx={{ maxWidth: 500, maxHeight: 450 }}>
+      {imageData?.length === 0 && (
+        <Typography color={"text.disabled"} variant="subtitle1">
+          No Image Found in the System!
+        </Typography>
+      )}
       {imageData &&
         imageData.map((item, i) => (
           <Box key={item.id}>

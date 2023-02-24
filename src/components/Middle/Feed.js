@@ -1,30 +1,17 @@
 import React from "react";
-import { Alert, Backdrop, Box, CircularProgress } from "@mui/material";
+import { Alert, Box, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 
 import Post from "./Post";
 import AddPost from "./AddPost";
-import { useGetRequest } from "../../hooks/api";
 
 const Feed = (props) => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
-  const { data: postData, loading, error } = useGetRequest("feed/post/");
+  // Reciving postData from redux
+  const postData = useSelector((state) => state.data.postData);
 
-  if (loading) {
-    return (
-      <Box flex={4} p={2} flexGrow={4} marginBottom={8} id="home">
-        <Backdrop
-          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open={loading}
-        >
-          <CircularProgress color="inherit" />
-        </Backdrop>
-      </Box>
-    );
-  }
-
-  if (error) {
+  if (props.error) {
     return (
       <Box flex={4} p={2} flexGrow={4} marginBottom={8} id="home">
         <Alert severity="error">
@@ -45,6 +32,16 @@ const Feed = (props) => {
       id="home"
     >
       {isLoggedIn && <AddPost />}
+      {postData?.length === 0 && (
+        <Typography
+          color={"text.disabled"}
+          variant="subtitle1"
+          textAlign={"center"}
+          marginTop={10}
+        >
+          No Post Found in the System!
+        </Typography>
+      )}
       {postData &&
         postData.map((item) => (
           <Post

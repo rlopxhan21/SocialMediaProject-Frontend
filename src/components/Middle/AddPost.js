@@ -1,5 +1,6 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { Link as RouterLink } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import {
   ArrowBack,
   Clear,
@@ -23,6 +24,9 @@ import {
   Button,
   Fab,
 } from "@mui/material";
+import { useAuthPostFileRequest, useGetRequest } from "../../hooks/api";
+import { dataActions } from "../../Redux/dataSlice";
+import { LoadingButton } from "@mui/lab";
 
 const style = {
   position: "absolute",
@@ -49,10 +53,39 @@ const AddPost = () => {
   const [selectedFiles, setSelectedFiles] = React.useState();
   const [preview, setPreview] = React.useState();
   const [error, setError] = React.useState(false);
+  const dispatch = useDispatch();
+
+  // Calling userID
+  const userID = useSelector((state) => state.auth.currentUserID);
+
+  // Calling get postData request when new data is added
+  const [url, setURL] = React.useState("");
+  const { data: postData, loading: loadingGET } = useGetRequest(url);
 
   // Calling custom hook for post submission
   const [urlData, setUrlData] = React.useState({ url: "", data: "" });
-  // const {data: postData, error, }
+  const {
+    data: intPostData,
+    error: AddPostError,
+    loading: loadingPOST,
+  } = useAuthPostFileRequest(urlData.url, urlData.data);
+
+  // To dispatch when post data recieved
+  React.useEffect(() => {
+    postData && dispatch(dataActions.postDataHandler(postData));
+    if (AddPostError) {
+      setError(true);
+      return;
+    }
+    setURL("");
+    setOpen(false);
+  }, [postData, dispatch, AddPostError]);
+
+  // Running GET request to recieve post data when posting is successful
+  React.useEffect(() => {
+    intPostData && setURL("feed/post/");
+    setUrlData({ url: "", data: "" });
+  }, [intPostData]);
 
   React.useEffect(() => {
     if (!selectedFiles) {
@@ -71,12 +104,19 @@ const AddPost = () => {
 
     if (content.length === 0) {
       setError(true);
+    } else if (!selectedFiles) {
+      setUrlData({ url: "feed/post/", data: { content } });
+
+      setError(false);
+      setSelectedFiles();
+      setPreview();
     } else {
       const formData = new FormData();
       formData.append("content", content);
       formData.append("imagefield", selectedFiles);
 
-      setOpen(false);
+      setUrlData({ url: "feed/post/", data: formData });
+
       setError(false);
       setSelectedFiles();
       setPreview();
@@ -110,7 +150,7 @@ const AddPost = () => {
         alignItems="center"
         py={1}
       >
-        <IconButton>
+        <IconButton component={RouterLink} to={`/profile/${userID}`}>
           <Avatar
             alt={profileData && profileData.first_name}
             sx={{ height: { xs: 30, md: 60 }, width: { xs: 30, md: 60 } }}
@@ -254,6 +294,7 @@ const AddPost = () => {
               id="standard-multiline-static"
               multiline
               rows={4}
+              autoFocus
               placeholder={`What's on your mind, ${
                 profileData && profileData.first_name.slice(0, 15)
               }?`}
@@ -288,7 +329,19 @@ const AddPost = () => {
               variant="contained"
               aria-label="outlined primary button group"
             >
-              <Button type="submit">Post</Button>
+              {!loadingPOST && !loadingGET && (
+                <Button type="submit">Post</Button>
+              )}
+              {loadingGET && (
+                <LoadingButton loading loadingPosition="center">
+                  Post
+                </LoadingButton>
+              )}
+              {loadingPOST && (
+                <LoadingButton loading loadingPosition="center">
+                  Post
+                </LoadingButton>
+              )}
               <Button sx={{ width: "100px" }} disabled>
                 <DateRange />
               </Button>

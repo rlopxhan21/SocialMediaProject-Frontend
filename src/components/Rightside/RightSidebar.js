@@ -98,6 +98,11 @@ const RightSidebar = () => {
           Recent Actvities
         </Typography>
         <List sx={{ width: "100%", bgcolor: "background.paper" }}>
+          {!error && (
+            <Typography color={"text.disabled"} variant="subtitle1">
+              No activities Found!
+            </Typography>
+          )}
           {error ? (
             <Alert severity="error">
               Error! Request failed with status code 404. Please refresh to try

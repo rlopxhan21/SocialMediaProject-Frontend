@@ -29,6 +29,7 @@ import {
   MenuItem,
   Typography,
 } from "@mui/material";
+import { useAuthPostRequest } from "../../hooks/api";
 
 const Post = (props) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -46,8 +47,24 @@ const Post = (props) => {
 
   const navigate = useNavigate();
 
+  // TO send like POST request
+  const [urlData, setUrlData] = React.useState({ url: "", data: "" });
+  const {
+    data: LikeData,
+    error,
+    loading,
+  } = useAuthPostRequest(urlData.url, urlData.data);
+
+  // React.useEffect(() => {
+  //   LikeData && setUrlData({url: })
+  // }, [])
+
   const onLoveHandler = (event) => {
     if (isLoggedIn) {
+      setUrlData({
+        url: `feed/post/${props.id}/like/`,
+        data: { comment: "yes" },
+      });
     } else {
       navigate("/login");
     }

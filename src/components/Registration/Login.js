@@ -34,12 +34,16 @@ const Login = () => {
   const [urlData, setUrlData] = React.useState({ url: "", data: "" });
   const { data, loading, error } = usePostRequest(urlData.url, urlData.data);
 
-  error && console.log(error.data);
+  error && console.log(error);
 
   // For dispatching data to authSlice
   const dispatch = useDispatch();
 
-  data && dispatch(authActions.loginHandler(data));
+  data?.access && dispatch(authActions.loginHandler(data));
+
+  data?.username && dispatch(authActions.registerNewUser(data));
+
+  data?.username && navigate("/account/activate");
 
   // Function for submitting Login Form
   const onLoginSubmitHandler = (event) => {
@@ -112,7 +116,6 @@ const Login = () => {
       };
 
       setUrlData({ url: "auth/users/", data: registerData });
-      navigate("/");
     }
   };
 

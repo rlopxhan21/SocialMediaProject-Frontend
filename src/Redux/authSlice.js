@@ -10,6 +10,7 @@ const initialState = {
     ? jwt_decode(JSON.parse(localStorage.getItem("authToken"))?.access)?.user_id
     : undefined,
   currentUserData: undefined,
+  unactivatedUserData: undefined,
 };
 
 const authSlice = createSlice({
@@ -37,6 +38,9 @@ const authSlice = createSlice({
 
     updateCurrentUserData(state, action) {
       state.currentUserData = action.payload;
+    },
+    registerNewUser(state, action) {
+      state.unactivatedUserData = action.payload;
     },
   },
 });

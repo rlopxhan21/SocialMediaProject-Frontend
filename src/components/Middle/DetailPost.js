@@ -106,10 +106,6 @@ const DetailPost = () => {
     error,
   } = useGetRequest(`feed/post/${postID}`);
 
-  postData && console.log(postData);
-
-  console.log(postData);
-
   React.useEffect(() => {
     if (postData) {
       postData?.imagefield && setImagePresentInPost(true);
@@ -418,80 +414,92 @@ const DetailPost = () => {
           <Typography variant="body2">Be First to add comment.</Typography>
         )}
 
-        <Card
-          sx={{ marginTop: 4 }}
-          component="form"
-          noValidate
-          onSubmit={onCommentSubmitHandler}
-        >
-          <Stack direction={"row"} alignItems="center" py={1}>
-            <IconButton>
-              <Avatar
-                alt="name"
-                sx={{ height: { xs: 30, md: 60 }, width: { xs: 30, md: 60 } }}
-                src="ans"
-              >
-                R
-              </Avatar>
-            </IconButton>
-            <TextField
-              id="outlined-textarea"
-              name="comment"
-              variant="outlined"
-              label="Write a comment..."
-              placeholder="Write a comment..."
-              value={commentInput}
-              onChange={(e) => setCommentInput(e.target.value)}
-              multiline
-              fullWidth
-              error={errorComment}
-            />
-          </Stack>
-          <Box position={"relative"}>
-            {selectedFiles && (
-              <Box
-                component="img"
-                sx={{
-                  width: 100,
-                }}
-                src={preview}
-              />
-            )}
-            {selectedFiles && (
-              <Fab
-                aria-label="delete"
-                size="small"
-                sx={{
-                  position: "absolute",
-                  top: "-7px",
-                  left: "87px",
-                  zIndex: 999,
-                }}
-                onClick={onImageDeleteHandler}
-              >
-                <Clear />
-              </Fab>
-            )}
-          </Box>
-          <ButtonGroup
-            fullWidth
-            variant="contained"
-            aria-label="outlined primary button group"
+        {!isLoggedIn && (
+          <Typography color={"text.disabled"} variant="subtitle1" mt={2}>
+            You need to{" "}
+            <Typography variant="span" component={RouterLink} to="/login">
+              Log In
+            </Typography>{" "}
+            to comment on the post.
+          </Typography>
+        )}
+
+        {isLoggedIn && (
+          <Card
+            sx={{ marginTop: 4 }}
+            component="form"
+            noValidate
+            onSubmit={onCommentSubmitHandler}
           >
-            <Button type="submit">Post</Button>
-            <Button sx={{ width: "200px" }} component={"label"}>
-              <InsertPhoto />
-              <input
-                accept="image/"
-                name="image"
-                type="file"
-                onChange={onImageChangeHandler}
-                multiple
-                hidden
+            <Stack direction={"row"} alignItems="center" py={1}>
+              <IconButton>
+                <Avatar
+                  alt="name"
+                  sx={{ height: { xs: 30, md: 60 }, width: { xs: 30, md: 60 } }}
+                  src="ans"
+                >
+                  R
+                </Avatar>
+              </IconButton>
+              <TextField
+                id="outlined-textarea"
+                name="comment"
+                variant="outlined"
+                label="Write a comment..."
+                placeholder="Write a comment..."
+                value={commentInput}
+                onChange={(e) => setCommentInput(e.target.value)}
+                multiline
+                fullWidth
+                error={errorComment}
               />
-            </Button>
-          </ButtonGroup>
-        </Card>
+            </Stack>
+            <Box position={"relative"}>
+              {selectedFiles && (
+                <Box
+                  component="img"
+                  sx={{
+                    width: 100,
+                  }}
+                  src={preview}
+                />
+              )}
+              {selectedFiles && (
+                <Fab
+                  aria-label="delete"
+                  size="small"
+                  sx={{
+                    position: "absolute",
+                    top: "-7px",
+                    left: "87px",
+                    zIndex: 999,
+                  }}
+                  onClick={onImageDeleteHandler}
+                >
+                  <Clear />
+                </Fab>
+              )}
+            </Box>
+            <ButtonGroup
+              fullWidth
+              variant="contained"
+              aria-label="outlined primary button group"
+            >
+              <Button type="submit">Post</Button>
+              <Button sx={{ width: "200px" }} component={"label"}>
+                <InsertPhoto />
+                <input
+                  accept="image/"
+                  name="image"
+                  type="file"
+                  onChange={onImageChangeHandler}
+                  multiple
+                  hidden
+                />
+              </Button>
+            </ButtonGroup>
+          </Card>
+        )}
       </Card>
 
       {/* Image Viewer */}

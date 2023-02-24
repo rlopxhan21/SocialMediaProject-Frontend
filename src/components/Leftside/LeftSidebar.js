@@ -17,8 +17,10 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
+import { useSelector } from "react-redux";
 
 const LeftSidebar = () => {
+  const userID = useSelector((state) => state.auth.currentUserID);
   return (
     <Box
       flex={1}
@@ -53,7 +55,7 @@ const LeftSidebar = () => {
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton component={RouterLink} to="/profile/1">
+            <ListItemButton component={RouterLink} to={`/profile/${userID}`}>
               <ListItemIcon>
                 <AccountBox />
               </ListItemIcon>

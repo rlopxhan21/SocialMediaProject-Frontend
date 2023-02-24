@@ -15,21 +15,17 @@ export const useAxios = () => {
 
   const axiosInstance = axios.create({
     baseURL,
-    headers: { Authorization: `Bearer ${access}` },
+    headers: { Authorization: `JWT ${access}` },
   });
 
   axiosInstance.interceptors.request.use(async (req) => {
-    const tokenExpireTime = moment(new Date(jwt_decode(access).exp));
-    const isExpired = moment(new Date()).diff(tokenExpireTime, "minutes") < 1;
+    const tokenExpireTime = moment(new Date(jwt_decode(access).exp * 1000));
+    const isExpired = moment(new Date()).diff(tokenExpireTime, "seconds") > -20;
 
-    console.log(isExpired);
+    // console.log(moment(new Date()).diff(tokenExpireTime, "seconds"));
+    // console.log(isExpired);
 
     if (!isExpired) return req;
-
-    if (isExpired) {
-      dispatch(authActions.logoutHandler());
-      return;
-    }
 
     try {
       const response = await axios({
@@ -41,7 +37,7 @@ export const useAxios = () => {
         },
       });
 
-      req.headers.Authorization = `Bearer ${response.data.access}`;
+      req.headers.Authorization = `JWT ${response.data.access}`;
       dispatch(authActions.loginHandler(response.data));
       return req;
     } catch (error) {

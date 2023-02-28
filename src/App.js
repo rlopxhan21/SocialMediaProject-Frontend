@@ -13,8 +13,8 @@ import { PostDetailPage } from "./Pages/PostDetailPage";
 import { AccountActivated } from "./Pages/AccountActivated";
 import { PasswordReset } from "./Pages/PasswordReset";
 import { ProfilePage } from "./Pages/ProfilePage";
-import { AccountActivation } from "./components/Registration/AccountActivation";
-import { ResetPassword } from "./components/Registration/ResetPassword";
+import { AccountActivation } from "./components/Account/AccountActivation";
+import { ResetPassword } from "./components/Account/ResetPassword";
 import { DarkNScrollUp } from "./components/Layout/Fab/DarkNScrollUp";
 
 import { ThemeProvider } from "@mui/material";

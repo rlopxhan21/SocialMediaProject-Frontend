@@ -1,18 +1,20 @@
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
-import moment from "moment";
 import { useSelector } from "react-redux";
+import moment from "moment";
 
 import RecentActivities from "../../Rightside/RecentActivities";
-import { Comment } from "../../Middle/PostDetail/Comment";
+import { Comment } from "./Comment";
 
 import {
   Avatar,
   Badge,
+  Box,
   Card,
   CardActions,
   CardContent,
   CardHeader,
+  CardMedia,
   IconButton,
   ListItemIcon,
   Menu,
@@ -35,15 +37,6 @@ export const PostCard = (props) => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
-
-  const onVertClickHandler = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const onVertCloseHandler = () => {
-    setAnchorEl(null);
-  };
 
   const onLoveHandler = (event) => {};
 
@@ -75,8 +68,12 @@ export const PostCard = (props) => {
           </IconButton>
         }
         action={
+          // Post three dot
           <React.Fragment>
-            <IconButton aria-label="settings" onClick={onVertClickHandler}>
+            <IconButton
+              aria-label="settings"
+              onClick={(event) => setAnchorEl(event.currentTarget)}
+            >
               <MoreVert />
             </IconButton>
             <Menu
@@ -85,31 +82,31 @@ export const PostCard = (props) => {
                 "aria-labelledby": "post-menu",
               }}
               anchorEl={anchorEl}
-              open={open}
-              onClose={onVertCloseHandler}
+              open={Boolean(anchorEl)}
+              onClose={() => setAnchorEl(null)}
             >
               {isLoggedIn && (
-                <MenuItem onClick={onVertCloseHandler}>
+                <MenuItem onClick={() => setAnchorEl(null)}>
                   <ListItemIcon>
                     <Edit />
                   </ListItemIcon>
                   Edit Post
                 </MenuItem>
               )}
-              <MenuItem onClick={onVertCloseHandler}>
+              <MenuItem onClick={() => setAnchorEl(null)}>
                 <ListItemIcon>
                   <Wysiwyg />
                 </ListItemIcon>
                 View Post
               </MenuItem>
-              <MenuItem onClick={onVertCloseHandler}>
+              <MenuItem onClick={() => setAnchorEl(null)}>
                 <ListItemIcon>
                   <Link />
                 </ListItemIcon>
                 Copy Link
               </MenuItem>
               {isLoggedIn && (
-                <MenuItem onClick={onVertCloseHandler}>
+                <MenuItem onClick={() => setAnchorEl(null)}>
                   <ListItemIcon>
                     <DeleteForever />
                   </ListItemIcon>
@@ -138,17 +135,18 @@ export const PostCard = (props) => {
         subheader={moment(new Date(props.postData?.updated)).fromNow()}
       />
 
-      {/* {props.postData?.imagefield && (
-          <Box>
-            <CardMedia
-              component="img"
-              height="20%"
-              image={props.postData?.imagefield}
-              alt={props.postData?.content}
-              sx={{ "&:hover": { cursor: "pointer" } }}
-            />
-          </Box>
-        )} */}
+      {props.postData?.imagefield && (
+        <Box display={{ xs: "block", xl: "none" }}>
+          <CardMedia
+            component="img"
+            height="20%"
+            image={props.postData?.imagefield}
+            alt={props.postData?.content}
+            onClick={() => props.setImageViewer(true)}
+            sx={{ "&:hover": { cursor: "pointer" } }}
+          />
+        </Box>
+      )}
 
       <CardContent>
         <Typography variant="body2" color="text.secondary">
@@ -221,7 +219,7 @@ export const PostCard = (props) => {
         </Typography>
       )}
 
-      <Comment />
+      {isLoggedIn && <Comment />}
     </Card>
   );
 };

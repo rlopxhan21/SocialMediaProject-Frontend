@@ -1,5 +1,4 @@
 import React from "react";
-import { useSelector } from "react-redux";
 
 import {
   Avatar,
@@ -20,8 +19,6 @@ export const Comment = () => {
   const [errorComment, setErrorComment] = React.useState(false);
   const [commentInput, setCommentInput] = React.useState("");
 
-  const isLoggedin = useSelector((state) => state.auth.isLoggedin);
-
   React.useEffect(() => {
     if (!selectedFiles) {
       setPreview(undefined);
@@ -29,6 +26,7 @@ export const Comment = () => {
     }
 
     const objectURL = URL.createObjectURL(selectedFiles);
+
     setPreview(objectURL);
   }, [selectedFiles]);
 

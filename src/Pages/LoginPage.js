@@ -1,13 +1,7 @@
 import React from "react";
 
-import Login from "../components/Registration/Login";
-import { Header } from "../components/Layout/Header/Header";
+import { Authentication } from "../components/Registration/Authentication";
 
 export const LoginPage = () => {
-  return (
-    <React.Fragment>
-      <Header />
-      <Login />
-    </React.Fragment>
-  );
+  return <Authentication />;
 };

@@ -8,9 +8,9 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import Header from "../Layout/Header";
+import { Header } from "../Layout/Header/Header";
 
-const ResetPassword = () => {
+export const ResetPassword = () => {
   const [error, setError] = React.useState(false);
 
   const onPasswordSubmitHandler = (event) => {
@@ -89,5 +89,3 @@ const ResetPassword = () => {
     </React.Fragment>
   );
 };
-
-export default ResetPassword;

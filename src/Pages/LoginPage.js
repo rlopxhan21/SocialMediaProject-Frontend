@@ -1,9 +1,9 @@
 import React from "react";
 
-import Login from '../components/Registration/Login';
-import Header from '../components/Layout/Header';
+import Login from "../components/Registration/Login";
+import { Header } from "../components/Layout/Header/Header";
 
-const LoginPage = () => {
+export const LoginPage = () => {
   return (
     <React.Fragment>
       <Header />
@@ -11,5 +11,3 @@ const LoginPage = () => {
     </React.Fragment>
   );
 };
-
-export default LoginPage;

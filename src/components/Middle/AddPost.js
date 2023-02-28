@@ -48,7 +48,7 @@ const UserBox = styled(Box)({
   marginBottom: "20px",
 });
 
-const AddPost = () => {
+export const AddPost = () => {
   const [open, setOpen] = React.useState(false);
   const [selectedFiles, setSelectedFiles] = React.useState();
   const [preview, setPreview] = React.useState();
@@ -352,5 +352,3 @@ const AddPost = () => {
     </Card>
   );
 };
-
-export default AddPost;

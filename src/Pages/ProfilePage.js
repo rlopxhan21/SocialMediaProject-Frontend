@@ -1,26 +1,27 @@
 import React from "react";
-import Header from "../components/Layout/Header";
-import Profile from "../components/ProfileAccount/Profile";
-import MobileBottom from "../components/Layout/MobileBottom";
 import { useParams } from "react-router-dom";
-import { useGetRequest } from "../hooks/api";
 
-const ProfilePage = () => {
+import { useGetProfile } from "../hooks/ProfileHooks/useGetProfile";
+
+import { Profile } from "../components/ProfileAccount/Profile";
+
+export const ProfilePage = () => {
   const { profileID } = useParams();
 
-  const {
-    data: profileData,
-    loading,
-    error,
-  } = useGetRequest(`useraccount/userinfo/${profileID}`);
+  const { profileData, profileLoading, profileError, fetchProfileData } =
+    useGetProfile();
+
+  React.useEffect(() => {
+    fetchProfileData(profileID);
+  }, []);
 
   return (
     <React.Fragment>
-      <Header />
-      <Profile profileData={profileData} loading={loading} error={error} />
-      <MobileBottom />
+      <Profile
+        profileData={profileData}
+        loading={profileLoading}
+        error={profileError}
+      />
     </React.Fragment>
   );
 };
-
-export default ProfilePage;

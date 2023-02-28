@@ -1,9 +1,10 @@
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
-import { Book, Create, Groups, Home, People } from "@mui/icons-material";
-import { BottomNavigation, BottomNavigationAction, Paper } from "@mui/material";
 
-const MobileBottom = () => {
+import { BottomNavigation, BottomNavigationAction, Paper } from "@mui/material";
+import { Book, Create, Groups, Home, People } from "@mui/icons-material";
+
+export const MobileBottom = () => {
   return (
     <Paper
       sx={{
@@ -29,5 +30,3 @@ const MobileBottom = () => {
     </Paper>
   );
 };
-
-export default MobileBottom;

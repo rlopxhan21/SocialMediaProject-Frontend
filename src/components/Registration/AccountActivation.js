@@ -1,12 +1,12 @@
 import React from "react";
-import Header from "../Layout/Header";
+import { Header } from "../Layout/Header/Header";
 import { useSelector, useDispatch } from "react-redux";
 import { LockOutlined } from "@mui/icons-material";
 import { Avatar, Box, Button, TextField, Typography } from "@mui/material";
 import { usePostRequest } from "../../hooks/api";
 import { authActions } from "../../Redux/authSlice";
 
-const AccountActivation = () => {
+export const AccountActivation = () => {
   // Sending Data for login after activation
   const [urlData, setUrlData] = React.useState({ url: "", data: "" });
   const { data, error, loading } = usePostRequest(urlData.url, urlData.data);
@@ -92,5 +92,3 @@ const AccountActivation = () => {
     </React.Fragment>
   );
 };
-
-export default AccountActivation;

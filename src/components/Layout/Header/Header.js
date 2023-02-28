@@ -1,6 +1,7 @@
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+
 import {
   Chat,
   DeveloperBoard,
@@ -12,10 +13,9 @@ import {
 import {
   AppBar,
   Avatar,
-  Backdrop,
   Badge,
   Button,
-  CircularProgress,
+  Box,
   Divider,
   IconButton,
   List,
@@ -27,11 +27,9 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { Box } from "@mui/system";
 
-import RecentActivities from "../Rightside/RecentActivities";
-import { useAuthGetRequest, usePostRequest } from "../../hooks/api";
-import { authActions } from "../../Redux/authSlice";
+import { usePostRequest } from "../../../hooks/api";
+import { authActions } from "../../../Redux/authSlice";
 
 const DUMMY_DATA = [];
 
@@ -41,7 +39,7 @@ const StyledToolBar = styled(Toolbar)({
   alignItems: "center",
 });
 
-const Header = () => {
+export const Header = () => {
   // React Redux recieving data and sending it
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -139,9 +137,10 @@ const Header = () => {
                 aria-label="show 17 new notifications"
                 color="inherit"
                 onClick={notificationHandleClick}
+                disabled
               >
                 <Badge
-                  badgeContent={17}
+                  badgeContent={0}
                   color="error"
                   max={9}
                   overlap="circular"
@@ -369,5 +368,3 @@ const Header = () => {
     </AppBar>
   );
 };
-
-export default Header;

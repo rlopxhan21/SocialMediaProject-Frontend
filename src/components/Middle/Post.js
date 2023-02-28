@@ -1,18 +1,10 @@
 import React from "react";
+import moment from "moment";
 import { useSelector } from "react-redux";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
-import moment from "moment";
-import {
-  Favorite,
-  FavoriteBorder,
-  MoreVert,
-  Share,
-  Edit,
-  Wysiwyg,
-  Link,
-  DeleteForever,
-  ModeComment,
-} from "@mui/icons-material";
+
+import { useAuthPostRequest } from "../../hooks/api";
+
 import {
   Avatar,
   Badge,
@@ -28,9 +20,19 @@ import {
   MenuItem,
   Typography,
 } from "@mui/material";
-import { useAuthPostRequest, useGetRequest } from "../../hooks/api";
+import {
+  Favorite,
+  FavoriteBorder,
+  MoreVert,
+  Share,
+  Edit,
+  Wysiwyg,
+  Link,
+  DeleteForever,
+  ModeComment,
+} from "@mui/icons-material";
 
-const Post = (props) => {
+export const Post = (props) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
@@ -43,10 +45,8 @@ const Post = (props) => {
   };
 
   // Receiving Post Data from Backend
-  const [url, setURL] = React.useState(`feed/post/`);
-  const { data: postData } = useGetRequest(url);
-
-  React.useEffect(() => {}, []);
+  // const [url, setURL] = React.useState(`feed/post/`);
+  // const { data: postData } = useGetRequest(url);
 
   // importing login state
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -56,17 +56,14 @@ const Post = (props) => {
   // Importing user detail and postData from redux
   const userData = useSelector((state) => state.auth.curentUserData);
 
-  // console.log("liked_post", props.liked_post);
+  // console.log(props.liked_post);
+  console.log(userData);
 
   const postLike = props.liked_post.filter(
     (item) => userData?.email === item?.author
   );
 
   const isPostLiked = postLike.length > 0;
-
-  // React.useEffect(() => {
-  //   console.log(userData);
-  // }, [userData]);
 
   // console.log(isPostLiked);
 
@@ -78,15 +75,15 @@ const Post = (props) => {
     loading,
   } = useAuthPostRequest(urlData.url, urlData.data);
 
-  // React.useEffect(() => {
-  //   LikeData && setUrlData({url: })
-  // }, [])
+  React.useEffect(() => {
+    LikeData && console.log("hello");
+  }, [LikeData]);
 
   const onLoveHandler = (event) => {
     if (isLoggedIn) {
       setUrlData({
         url: `feed/post/${props.id}/like/`,
-        data: { comment: "yes" },
+        data: { like: "yes" },
       });
     } else {
       navigate("/login");
@@ -226,5 +223,3 @@ const Post = (props) => {
     </Card>
   );
 };
-
-export default Post;

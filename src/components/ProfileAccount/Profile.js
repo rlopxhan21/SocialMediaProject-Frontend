@@ -1,9 +1,9 @@
 import React from "react";
-import LeftSidebar from "../Leftside/LeftSidebar";
-import AddPost from "../Middle/AddPost";
+import { LeftSidebar } from "../Leftside/LeftSidebar";
+import { AddPost } from "../Middle/AddPost";
 import RecentActivities from "../Rightside/RecentActivities";
 import { useSelector } from "react-redux";
-import Post from "../Middle/Post";
+import { Post } from "../Middle/Post";
 import moment from "moment";
 
 import {
@@ -300,7 +300,7 @@ function ChangeEmail() {
   );
 }
 
-const Profile = ({ profileData, loading, error }) => {
+export const Profile = ({ profileData, loading, error }) => {
   const [openImage, setOpenImage] = React.useState(false);
   const onImageHandleOpen = () => setOpenImage(true);
   const onImageHandleClose = () => setOpenImage(false);
@@ -533,6 +533,7 @@ const Profile = ({ profileData, loading, error }) => {
                     content={item.content}
                     loveNumber={item.liked_post.length}
                     commentNumber={item.comment_on_post.length}
+                    liked_post={item.liked_post}
                   />
                 ))}
               </Box>
@@ -782,5 +783,3 @@ const Profile = ({ profileData, loading, error }) => {
     </Box>
   );
 };
-
-export default Profile;

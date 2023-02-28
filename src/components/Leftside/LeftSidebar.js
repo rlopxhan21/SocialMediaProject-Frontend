@@ -1,5 +1,7 @@
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
+import { useSelector } from "react-redux";
+
 import {
   AccountBox,
   Book,
@@ -17,10 +19,11 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import { useSelector } from "react-redux";
 
-const LeftSidebar = () => {
+export const LeftSidebar = () => {
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const userID = useSelector((state) => state.auth.currentUserID);
+
   return (
     <Box
       flex={1}
@@ -43,8 +46,8 @@ const LeftSidebar = () => {
               />
             </ListItemButton>
           </ListItem>
-          <ListItem disablePadding disabled>
-            <ListItemButton>
+          <ListItem disablePadding>
+            <ListItemButton disabled>
               <ListItemIcon>
                 <People />
               </ListItemIcon>
@@ -55,7 +58,11 @@ const LeftSidebar = () => {
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton component={RouterLink} to={`/profile/${userID}`}>
+            <ListItemButton
+              component={RouterLink}
+              to={`/profile/${userID}`}
+              disabled={isLoggedIn ? false : true}
+            >
               <ListItemIcon>
                 <AccountBox />
               </ListItemIcon>
@@ -65,8 +72,8 @@ const LeftSidebar = () => {
               />
             </ListItemButton>
           </ListItem>
-          <ListItem disablePadding disabled>
-            <ListItemButton>
+          <ListItem disablePadding>
+            <ListItemButton disabled>
               <ListItemIcon>
                 <Settings />
               </ListItemIcon>
@@ -77,8 +84,8 @@ const LeftSidebar = () => {
             </ListItemButton>
           </ListItem>
           <Divider />
-          <ListItem disablePadding disabled>
-            <ListItemButton>
+          <ListItem disablePadding>
+            <ListItemButton disabled>
               <ListItemIcon>
                 <Groups />
               </ListItemIcon>
@@ -89,8 +96,8 @@ const LeftSidebar = () => {
             </ListItemButton>
           </ListItem>
           <Divider />
-          <ListItem disablePadding disabled>
-            <ListItemButton>
+          <ListItem disablePadding>
+            <ListItemButton disabled>
               <ListItemIcon>
                 <Book />
               </ListItemIcon>
@@ -105,5 +112,3 @@ const LeftSidebar = () => {
     </Box>
   );
 };
-
-export default LeftSidebar;

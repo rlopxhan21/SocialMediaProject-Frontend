@@ -1,20 +1,18 @@
-import { Box, Stack } from "@mui/material";
 import React from "react";
-import Header from "../components/Layout/Header";
-import MobileBottom from "../components/Layout/MobileBottom";
-import DetailPost from "../components/Middle/DetailPost";
 
-const PostDetailPage = () => {
+import { DetailPost } from "../components/Middle/PostDetail/DetailPost";
+
+import { Stack } from "@mui/material";
+
+export const PostDetailPage = () => {
   return (
-    <Box backgroundColor={"background.default"} color={"text.primary"}>
-      <Header />
-
-      <Stack direction="row" justifyContent="space-between">
-        <DetailPost />
-      </Stack>
-      <MobileBottom />
-    </Box>
+    <Stack
+      direction="row"
+      justifyContent="space-between"
+      backgroundColor={"background.default"}
+      color={"text.primary"}
+    >
+      <DetailPost />
+    </Stack>
   );
 };
-
-export default PostDetailPage;

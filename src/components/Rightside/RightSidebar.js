@@ -17,7 +17,7 @@ import moment from "moment";
 
 let filteredOnlineFriend = "";
 
-const RightSidebar = () => {
+export const RightSidebar = () => {
   const { data: commentData, error } = useGetRequest("feed/comment/");
 
   const { data: onlineFriend, error: onlineFriendError } = useGetRequest(
@@ -134,5 +134,3 @@ const RightSidebar = () => {
     </Box>
   );
 };
-
-export default RightSidebar;

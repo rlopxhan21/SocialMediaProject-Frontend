@@ -49,7 +49,7 @@ export const PublicFeed = () => {
       )}
 
       {postData &&
-        postData?.map((item) => (
+        postData.map((item) => (
           <Post
             key={item.id}
             id={item.id}

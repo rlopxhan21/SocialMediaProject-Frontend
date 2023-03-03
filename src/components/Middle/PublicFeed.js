@@ -37,7 +37,7 @@ export const PublicFeed = () => {
     >
       {isLoggedIn && <AddPost />}
 
-      {postData?.length === 0 && (
+      {postData && postData?.length === 0 && (
         <Typography
           color={"text.disabled"}
           variant="subtitle1"
@@ -48,25 +48,28 @@ export const PublicFeed = () => {
         </Typography>
       )}
 
-      {postData?.map((item) => (
-        <Post
-          key={item.id}
-          id={item.id}
-          username={item.author_of_post.username}
-          fullName={
-            item.author_of_post.first_name + " " + item.author_of_post.last_name
-          }
-          authorImage={item.author_of_post.imagefield}
-          imageData={item.imagefield}
-          authorID={item.author_of_post.id}
-          created={item.created}
-          updated={item.updated}
-          content={item.content}
-          loveNumber={item.liked_post.length}
-          commentNumber={item.comment_on_post.length}
-          liked_post={item.liked_post}
-        />
-      ))}
+      {postData &&
+        postData?.map((item) => (
+          <Post
+            key={item.id}
+            id={item.id}
+            username={item.author_of_post.username}
+            fullName={
+              item.author_of_post.first_name +
+              " " +
+              item.author_of_post.last_name
+            }
+            authorImage={item.author_of_post.imagefield}
+            imageData={item.imagefield}
+            authorID={item.author_of_post.id}
+            created={item.created}
+            updated={item.updated}
+            content={item.content}
+            loveNumber={item.liked_post.length}
+            commentNumber={item.comment_on_post.length}
+            liked_post={item.liked_post}
+          />
+        ))}
     </Box>
   );
 };

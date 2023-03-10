@@ -13,6 +13,7 @@ export const useGetPost = () => {
       const response = await axios({
         method: "GET",
         url: process.env.REACT_APP_BASE_URL + "/feed/post/",
+        timeout: 5000,
       });
       setPostData(response.data);
       setPostLoading(false);

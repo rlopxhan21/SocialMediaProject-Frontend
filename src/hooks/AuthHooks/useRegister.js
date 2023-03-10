@@ -13,6 +13,7 @@ export const useRegister = () => {
       const response = await axios({
         method: "POST",
         url: process.env.REACT_APP_BASE_URL + "/auth/users/",
+        timeout: 5000,
         headers: {
           "Content-Type": "application/json",
         },

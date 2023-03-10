@@ -15,6 +15,7 @@ export const useGetProfile = () => {
         url:
           process.env.REACT_APP_BASE_URL +
           `/useraccount/userinfo/${profileID}/`,
+        timeout: 5000,
       });
       setProfileData(response.data);
       setProfileLoading(false);

@@ -13,6 +13,8 @@ export const useLogin = () => {
       const response = await axios({
         method: "POST",
         url: process.env.REACT_APP_BASE_URL + "/auth/jwt/create/",
+        timeout: 5000,
+
         headers: {
           "Content-Type": "application/json",
         },

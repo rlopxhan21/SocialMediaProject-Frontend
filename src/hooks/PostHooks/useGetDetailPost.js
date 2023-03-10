@@ -13,6 +13,7 @@ export const useGetDetailPost = () => {
       const response = await axios({
         method: "GET",
         url: process.env.REACT_APP_BASE_URL + `/feed/post/${postID}`,
+        timeout: 5000,
       });
       setDetailPostData(response.data);
       setDetailPostLoading(false);

@@ -36,6 +36,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { Loading } from "../Layout/Loading/Loading";
 
 const style = {
   position: "absolute",
@@ -338,16 +339,7 @@ export const Profile = ({ profileData, loading, error }) => {
   // Send APIs Request to receive Profile Data
 
   if (loading) {
-    return (
-      <Box flex={5} p={2} flexGrow={5}>
-        <Backdrop
-          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open={loading}
-        >
-          <CircularProgress color="inherit" />
-        </Backdrop>
-      </Box>
-    );
+    return <Loading loading={loading} />;
   }
 
   const onSubmitBasicHandler = (event) => {
@@ -358,8 +350,6 @@ export const Profile = ({ profileData, loading, error }) => {
     const send_username = username;
 
     console.log(first_name, last_name, send_username);
-
-    // setBasicInfo(false);
   };
 
   const open = Boolean(anchorEl);
@@ -383,6 +373,8 @@ export const Profile = ({ profileData, loading, error }) => {
     setSelectedFiles();
     setPreview(profileData?.imagefield);
   };
+
+  const onImageSubmitHandler = () => {};
 
   return (
     <Box>
@@ -728,7 +720,12 @@ export const Profile = ({ profileData, loading, error }) => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={{ ...style, width: { xs: "98vw", md: "50vw" } }}>
+        <Box
+          component={"form"}
+          noValidate
+          onSubmit={onImageSubmitHandler}
+          sx={{ ...style, width: { xs: "98vw", md: "50vw" } }}
+        >
           <Stack direction={"row"} justifyContent="space-between">
             <Button
               variant="outlined"
@@ -776,7 +773,9 @@ export const Profile = ({ profileData, loading, error }) => {
             <Button variant="contained" onClick={onImageDeleteHandler}>
               Delete
             </Button>
-            <Button variant="contained">Save</Button>
+            <Button variant="contained" type="submit">
+              Save
+            </Button>
           </Stack>
         </Box>
       </Modal>

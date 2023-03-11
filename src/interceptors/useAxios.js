@@ -4,7 +4,7 @@ import moment from "moment";
 import { useSelector, useDispatch } from "react-redux";
 import { authActions } from "../Redux/authSlice";
 
-const baseURL = "https://rlopxhan021.pythonanywhere.com/";
+const baseURL = "http://localhost:8000";
 
 export const useAxios = () => {
   const dispatch = useDispatch();
@@ -14,16 +14,12 @@ export const useAxios = () => {
   const access = authToken?.access;
 
   const axiosInstance = axios.create({
-    baseURL,
     headers: { Authorization: `JWT ${access}` },
   });
 
   axiosInstance.interceptors.request.use(async (req) => {
     const tokenExpireTime = moment(new Date(jwt_decode(access).exp * 1000));
     const isExpired = moment(new Date()).diff(tokenExpireTime, "seconds") > -20;
-
-    // console.log(moment(new Date()).diff(tokenExpireTime, "seconds"));
-    // console.log(isExpired);
 
     if (!isExpired) return req;
 

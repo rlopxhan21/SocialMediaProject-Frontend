@@ -1,5 +1,10 @@
+import React from "react";
+import moment from "moment";
+import { Link as RouterLink } from "react-router-dom";
+
+import { Error } from "../Layout/Error/Error";
+
 import {
-  Alert,
   Avatar,
   Box,
   ListItem,
@@ -8,18 +13,10 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
-import React from "react";
-import moment from "moment";
-import { Link as RouterLink } from "react-router-dom";
 
 const RecentActivities = (props) => {
   if (props.error) {
-    return (
-      <Alert severity="error">
-        Error! Request failed with status code 404. Please refresh to try
-        loading again.
-      </Alert>
-    );
+    return <Error />;
   }
   return (
     <ListItem

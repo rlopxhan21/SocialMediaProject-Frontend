@@ -1,13 +1,16 @@
 import * as React from "react";
 import { Link as RouterLink } from "react-router-dom";
+
+import { useGetPost } from "../../hooks/PostHooks/useGetPost";
+import { Error } from "../Layout/Error/Error";
+
+import { Box, Button, Modal, Stack, Typography } from "@mui/material";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
 import IconButton from "@mui/material/IconButton";
 import InfoIcon from "@mui/icons-material/Info";
-import { Alert, Box, Button, Modal, Stack, Typography } from "@mui/material";
 import { Cancel, Download } from "@mui/icons-material";
-import { useGetRequest } from "../../hooks/api";
 
 const style = {
   position: "absolute",
@@ -36,19 +39,18 @@ export default function LatestPhoto() {
       postID: null,
     });
 
-  const { data: postData, error } = useGetRequest("feed/post/");
+  const { postData, postError, fetchPostData } = useGetPost();
 
-  if (error) {
-    return (
-      <Alert severity="error">
-        Error! Request failed with status code 404. Please refresh to try
-        loading again.
-      </Alert>
-    );
+  React.useState(() => {
+    fetchPostData();
+  }, []);
+
+  if (postError) {
+    return <Error />;
   }
 
   if (postData) {
-    imageData = postData.filter((item) => item.imagefield);
+    imageData = postData?.filter((item) => item.imagefield);
   }
 
   return (

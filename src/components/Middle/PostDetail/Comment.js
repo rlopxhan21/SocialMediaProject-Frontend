@@ -12,13 +12,16 @@ import {
   TextField,
 } from "@mui/material";
 import { Clear, InsertPhoto } from "@mui/icons-material";
+import { usePostComment } from "../../../hooks/CommentHooks/usePostComment";
 
-export const Comment = () => {
+export const Comment = (props) => {
   const [selectedFiles, setSelectedFiles] = React.useState();
   const [preview, setPreview] = React.useState();
+
   const [errorComment, setErrorComment] = React.useState(false);
   const [commentInput, setCommentInput] = React.useState("");
 
+  // For previewing image ---- START
   React.useEffect(() => {
     if (!selectedFiles) {
       setPreview(undefined);
@@ -43,6 +46,14 @@ export const Comment = () => {
     setSelectedFiles();
     setPreview();
   };
+  // For previewing image ---- END
+
+  const {
+    newCommentData,
+    newCommentLoading,
+    newCommentError,
+    sendNewCommentData,
+  } = usePostComment();
 
   const onCommentSubmitHandler = (event) => {
     event.preventDefault();
@@ -51,15 +62,18 @@ export const Comment = () => {
 
     if (content.length === 0) {
       setErrorComment(true);
+    } else if (!selectedFiles) {
+      sendNewCommentData({ content }, props.postID);
+      setErrorComment(false);
+      setSelectedFiles();
+      setPreview();
+      setCommentInput("");
     } else {
       const formData = new FormData();
       formData.append("content", content);
       formData.append("imagefield", selectedFiles);
 
-      setErrorComment(false);
-      setSelectedFiles();
-      setPreview();
-      setCommentInput("");
+      sendNewCommentData(formData, props.postID);
     }
   };
 

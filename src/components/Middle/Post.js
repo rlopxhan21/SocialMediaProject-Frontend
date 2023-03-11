@@ -31,6 +31,7 @@ import {
   DeleteForever,
   ModeComment,
 } from "@mui/icons-material";
+import { usePostLike } from "../../hooks/LikeHooks/usePostLike";
 
 export const Post = (props) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -44,10 +45,6 @@ export const Post = (props) => {
     setAnchorEl(null);
   };
 
-  // Receiving Post Data from Backend
-  // const [url, setURL] = React.useState(`feed/post/`);
-  // const { data: postData } = useGetRequest(url);
-
   // importing login state
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
@@ -56,35 +53,18 @@ export const Post = (props) => {
   // Importing user detail and postData from redux
   const userData = useSelector((state) => state.auth.curentUserData);
 
-  // console.log(props.liked_post);
-  console.log(userData);
-
   const postLike = props.liked_post.filter(
     (item) => userData?.email === item?.author
   );
 
   const isPostLiked = postLike.length > 0;
 
-  // console.log(isPostLiked);
-
   // TO send like POST request
-  const [urlData, setUrlData] = React.useState({ url: "", data: "" });
-  const {
-    data: LikeData,
-    error,
-    loading,
-  } = useAuthPostRequest(urlData.url, urlData.data);
-
-  React.useEffect(() => {
-    LikeData && console.log("hello");
-  }, [LikeData]);
+  const { likeData, likeLoading, likeError, sendLikeData } = usePostLike();
 
   const onLoveHandler = (event) => {
     if (isLoggedIn) {
-      setUrlData({
-        url: `feed/post/${props.id}/like/`,
-        data: { like: "yes" },
-      });
+      sendLikeData(props.id);
     } else {
       navigate("/login");
     }

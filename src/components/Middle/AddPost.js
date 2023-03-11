@@ -1,6 +1,7 @@
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { useNewPost } from "../../hooks/PostHooks/useNewPost";
 import {
   ArrowBack,
   Clear,
@@ -10,6 +11,7 @@ import {
   PersonAdd,
   VideoCameraBack,
 } from "@mui/icons-material";
+import { LoadingButton } from "@mui/lab";
 import {
   Avatar,
   Box,
@@ -24,9 +26,6 @@ import {
   Button,
   Fab,
 } from "@mui/material";
-import { useAuthPostFileRequest, useGetRequest } from "../../hooks/api";
-import { dataActions } from "../../Redux/dataSlice";
-import { LoadingButton } from "@mui/lab";
 
 const style = {
   position: "absolute",
@@ -34,7 +33,6 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: { xs: "98vw", md: 600 },
-  // height:{xs:"50vh"},
   bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
@@ -50,54 +48,51 @@ const UserBox = styled(Box)({
 
 export const AddPost = () => {
   const [open, setOpen] = React.useState(false);
+
   const [selectedFiles, setSelectedFiles] = React.useState();
   const [preview, setPreview] = React.useState();
-  const [error, setError] = React.useState(false);
-  const dispatch = useDispatch();
 
-  // Calling userID
+  const [error, setError] = React.useState(false);
+
   const userID = useSelector((state) => state.auth.currentUserID);
 
-  // Calling get postData request when new data is added
-  const [url, setURL] = React.useState("");
-  const { data: postData, loading: loadingGET } = useGetRequest(url);
-
-  // Calling custom hook for post submission
-  const [urlData, setUrlData] = React.useState({ url: "", data: "" });
-  const {
-    data: intPostData,
-    error: AddPostError,
-    loading: loadingPOST,
-  } = useAuthPostFileRequest(urlData.url, urlData.data);
-
-  // To dispatch when post data recieved
-  React.useEffect(() => {
-    postData && dispatch(dataActions.postDataHandler(postData));
-    if (AddPostError) {
-      setError(true);
+  // For Handling Image Section --- Start
+  const onImageChangeHandler = (event) => {
+    if (!event.target.files || event.target.files.length === 0) {
+      setSelectedFiles(undefined);
       return;
     }
-    setURL("");
-    setOpen(false);
-  }, [postData, dispatch, AddPostError]);
+    setSelectedFiles(event.target.files[0]);
+  };
 
-  // Running GET request to recieve post data when posting is successful
-  React.useEffect(() => {
-    intPostData && setURL("feed/post/");
-    setUrlData({ url: "", data: "" });
-  }, [intPostData]);
+  const onImageDeleteHandler = () => {
+    setSelectedFiles();
+    setPreview();
+  };
 
   React.useEffect(() => {
     if (!selectedFiles) {
       setPreview(undefined);
       return;
     }
-
     const objectURL = URL.createObjectURL(selectedFiles);
     setPreview(objectURL);
   }, [selectedFiles]);
 
-  const onPostHandler = (event) => {
+  // For Handling Image Section --- End
+
+  const { newPostData, newPostLoading, newPostError, sendNewPostData } =
+    useNewPost();
+
+  React.useEffect(() => {
+    setOpen(false);
+  }, [newPostData]);
+
+  React.useEffect(() => {
+    newPostError && setError(true);
+  }, [newPostError]);
+
+  const onPostSubmitHandler = (event) => {
     event.preventDefault();
 
     const content = event.target.post.value;
@@ -105,7 +100,7 @@ export const AddPost = () => {
     if (content.length === 0) {
       setError(true);
     } else if (!selectedFiles) {
-      setUrlData({ url: "feed/post/", data: { content } });
+      sendNewPostData({ content });
 
       setError(false);
       setSelectedFiles();
@@ -115,7 +110,7 @@ export const AddPost = () => {
       formData.append("content", content);
       formData.append("imagefield", selectedFiles);
 
-      setUrlData({ url: "feed/post/", data: formData });
+      sendNewPostData(formData);
 
       setError(false);
       setSelectedFiles();
@@ -123,21 +118,7 @@ export const AddPost = () => {
     }
   };
 
-  const onImageChangeHandler = (event) => {
-    if (!event.target.files || event.target.files.length === 0) {
-      setSelectedFiles(undefined);
-      return;
-    }
-
-    setSelectedFiles(event.target.files[0]);
-  };
-
-  const onImageDeleteHandler = () => {
-    setSelectedFiles();
-    setPreview();
-  };
-
-  // Getting
+  // Getting Current User Data
   const profileData = useSelector((state) => state.auth.currentUserData);
 
   return (
@@ -261,7 +242,7 @@ export const AddPost = () => {
             sx={{ position: "relative" }}
             component="form"
             noValidate
-            onSubmit={onPostHandler}
+            onSubmit={onPostSubmitHandler}
           >
             <Box>
               {selectedFiles && (
@@ -329,15 +310,8 @@ export const AddPost = () => {
               variant="contained"
               aria-label="outlined primary button group"
             >
-              {!loadingPOST && !loadingGET && (
-                <Button type="submit">Post</Button>
-              )}
-              {loadingGET && (
-                <LoadingButton loading loadingPosition="center">
-                  Post
-                </LoadingButton>
-              )}
-              {loadingPOST && (
+              {!newPostLoading && <Button type="submit">Post</Button>}
+              {newPostLoading && (
                 <LoadingButton loading loadingPosition="center">
                   Post
                 </LoadingButton>

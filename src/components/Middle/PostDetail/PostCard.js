@@ -1,10 +1,11 @@
 import React from "react";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import moment from "moment";
 
 import RecentActivities from "../../Rightside/RecentActivities";
 import { Comment } from "./Comment";
+import { usePostLike } from "../../../hooks/LikeHooks/usePostLike";
 
 import {
   Avatar,
@@ -38,7 +39,13 @@ export const PostCard = (props) => {
 
   const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const onLoveHandler = (event) => {};
+  const navigate = useNavigate();
+
+  const { likeData, likeLoading, likeError, sendLikeData } = usePostLike();
+
+  const onLoveHandler = (event) => {
+    isLoggedIn ? sendLikeData(props.postID) : navigate("/login");
+  };
 
   return (
     <Card
@@ -156,7 +163,6 @@ export const PostCard = (props) => {
 
       <CardActions disableSpacing>
         <IconButton aria-label="add to favorites" onClick={onLoveHandler}>
-          {/* {!isLiked && ( */}
           <Badge
             badgeContent={props.postData?.liked_post?.length}
             max={99}
@@ -164,16 +170,13 @@ export const PostCard = (props) => {
           >
             <FavoriteBorder />
           </Badge>
-          {/* )} */}
-          {/* {isLiked && (
-            <Badge
-              badgeContent={props.postData?.liked_post?.length}
-              max={99}
-              color="secondary"
-            >
-              <Favorite sx={{ color: "red" }} />
-            </Badge>
-          )} */}
+          {/* <Badge
+            badgeContent={props.postData?.liked_post?.length}
+            max={99}
+            color="secondary"
+          >
+            <Favorite sx={{ color: "red" }} />
+          </Badge> */}
         </IconButton>
 
         <IconButton aria-label="comment">
@@ -219,7 +222,7 @@ export const PostCard = (props) => {
         </Typography>
       )}
 
-      {isLoggedIn && <Comment />}
+      {isLoggedIn && <Comment postID={props.postID} />}
     </Card>
   );
 };

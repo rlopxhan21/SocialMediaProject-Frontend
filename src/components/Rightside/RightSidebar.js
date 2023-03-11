@@ -14,11 +14,17 @@ import RecentActivities from "./RecentActivities";
 import LatestPhoto from "./LatestPhoto";
 import { useGetRequest } from "../../hooks/api";
 import moment from "moment";
+import { useGetComment } from "../../hooks/CommentHooks/useGetComment";
 
 let filteredOnlineFriend = "";
 
 export const RightSidebar = () => {
-  const { data: commentData, error } = useGetRequest("feed/comment/");
+  const { commentData, CommentLoading, commentError, fetchCommentData } =
+    useGetComment();
+
+  React.useEffect(() => {
+    fetchCommentData();
+  }, []);
 
   const { data: onlineFriend, error: onlineFriendError } = useGetRequest(
     "useraccount/userinfo/"
@@ -32,11 +38,7 @@ export const RightSidebar = () => {
 
         const timeDiff = currentTime.diff(lastLogin, "minutes");
 
-        if (timeDiff < 10) {
-          return true;
-        } else {
-          return false;
-        }
+        return timeDiff < 10;
       });
     }
   }, [onlineFriend]);
@@ -68,7 +70,10 @@ export const RightSidebar = () => {
           >
             {filteredOnlineFriend &&
               filteredOnlineFriend.map((item) => (
-                <Tooltip title={item.first_name + " " + item.last_name}>
+                <Tooltip
+                  key={item.id}
+                  title={item.first_name + " " + item.last_name}
+                >
                   <Avatar
                     key={item.id}
                     alt={item.first_name}
@@ -98,12 +103,12 @@ export const RightSidebar = () => {
           Recent Actvities
         </Typography>
         <List sx={{ width: "100%", bgcolor: "background.paper" }}>
-          {!error && (
+          {!commentError && (
             <Typography color={"text.disabled"} variant="subtitle1">
               No activities Found!
             </Typography>
           )}
-          {error ? (
+          {commentError ? (
             <Alert severity="error">
               Error! Request failed with status code 404. Please refresh to try
               loading again.

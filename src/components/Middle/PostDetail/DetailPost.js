@@ -48,7 +48,11 @@ export const DetailPost = () => {
       {extraLarge && (
         <PostImage postData={postData} setImageViewer={setImageViewer} />
       )}
-      <PostCard postData={postData} setImageViewer={setImageViewer} />
+      <PostCard
+        postData={postData}
+        setImageViewer={setImageViewer}
+        postID={postID}
+      />
       <ImageViewer
         postData={postData}
         imageViewer={imageViewer}
